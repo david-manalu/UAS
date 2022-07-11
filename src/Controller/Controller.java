@@ -30,10 +30,10 @@ public class Controller {
         return (categoryUsers);
     }
 
-    public static ArrayList<User> getAllUsersByCategory(String kategori) {
+    public static ArrayList<User> getAllUsers() {
         ArrayList<User> users = new ArrayList<>();
         conn.connect();
-        String query = "SELECT * FROM users";
+        String query = "SELECT * FROM user";
         try {
             Statement stmt = conn.con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -53,14 +53,43 @@ public class Controller {
         return (users);
     }
 
-    public static boolean login(String email, String password){
+    public static ArrayList<User> getAllUsersByCategory(String kategori) {
+        ArrayList<User> users = new ArrayList<>();
+        conn.connect();
+        String query = "SELECT * FROM user WHERE '" + kategori + "'";
+        try {
+            Statement stmt = conn.con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setIdCategory(rs.getInt("id category"));
+                user.setPhoto(rs.getString("photo"));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return (users);
+    }
+
+    public static boolean login(String email, String password) {
         conn.connect();
         String query = "SELECT * FROM user WHERE email = '" + email + "' && password = '" + password + "'";
-        try{
-            return true;
+        try {
+            var user = getAllUsers();
+            for (var u : user) {
+                if (u.getEmail().equals(email) && u.getPassword().equals(password)) {
+                    return true;
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return (false);
         }
+        return false;
     }
 }
