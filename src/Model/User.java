@@ -1,5 +1,8 @@
 package Model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class User{
     int id;
     String name;
@@ -18,6 +21,16 @@ public class User{
         this.password = password;
         this.idCategory = idCategory;
         this.photo = photo;
+    }
+
+    public User(ResultSet rs) throws SQLException
+    {
+        this.id = rs.getInt("id");
+        this.name = rs.getString("name");
+        this.email = rs.getString("email");
+        this.password = rs.getString("password");
+        this.idCategory = rs.getInt("idCategory");
+        this.photo = rs.getString("photo");
     }
 
     public int getId() {

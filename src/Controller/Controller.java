@@ -56,7 +56,7 @@ public class Controller {
     public static ArrayList<User> getAllUsersByCategory(String kategori) {
         ArrayList<User> users = new ArrayList<>();
         conn.connect();
-        String query = "SELECT * FROM user WHERE '" + kategori + "'";
+        String query = "SELECT * FROM user";
         try {
             Statement stmt = conn.con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -68,7 +68,9 @@ public class Controller {
                 user.setPassword(rs.getString("password"));
                 user.setIdCategory(rs.getInt("id category"));
                 user.setPhoto(rs.getString("photo"));
-                users.add(user);
+                if (getCategoryUser().get(user.getIdCategory()).getName().equals(kategori)) {
+                    users.add(user);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
